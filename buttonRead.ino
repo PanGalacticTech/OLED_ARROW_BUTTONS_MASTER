@@ -19,7 +19,7 @@ void buttonRead() {
   for (int i = 0; i < numberofbuttons; i++) {
     buttonStatus[i] = digitalRead(buttonPins[i]);
   }
-
+/*
   // Testing Output
   if (printSerial) {
     for (int i = 0; i < numberofbuttons; i++) {
@@ -27,14 +27,11 @@ void buttonRead() {
     }
     Serial.println(" ");
   }
-
+*/
 }
 
 
 
-bool scrollPage;
-bool scrollItem;
-bool scrollChar;
 
 
 bool buttonLockout = false;
@@ -59,23 +56,26 @@ uint8_t allbuttonsoff[6] = {0, 0, 0, 0, 0, 0};
 
 void buttonControl() {
 
-  if (!buttonLockout) {
 
-    for (int i = 0; i < 6; i++) {
-      if (buttonStatus[i] == HIGH) {
+
+  for (int i = 0; i < 6; i++) {
+    if (buttonStatus[i] == HIGH) {
+
+      if (!buttonLockout) {
         buttonsPressed[i] = true;
         buttonLockout = true;
-      } else {
-        buttonsPressed[i] = false;
       }
-    }
-
-    if (buttonStatus == allbuttonsoff) {
-      buttonLockout = false;
+    } else {
+      buttonsPressed[i] = false;
     }
   }
 
+  if (buttonStatus == allbuttonsoff) {
+    buttonLockout = false;
+  }
 
+
+  // only trigger once untill buttonlockout has been lifted
 
   if (buttonsPressed[0]) {  // If Up has been Pressed
     if (scrollItem) {
@@ -85,7 +85,7 @@ void buttonControl() {
       pageNumber--;
     }
     if (scrollChar) {
-      // charNumber--;   // charnumber scrolls the active char not the char itself
+      // charNumber--;                         // needs a function to change the specif char in the highlighted slot.
     }
     buttonsPressed[0] == false;
   }
@@ -99,7 +99,7 @@ void buttonControl() {
       pageNumber++;
     }
     if (scrollChar) {
-      // charNumber++;
+      // charNumber++;                                      // needs a function to change the specif char in the highlighted slot.
     }
     buttonsPressed[1] == false;
   }
@@ -124,7 +124,7 @@ void buttonControl() {
 
   if (buttonsPressed[4]) {  // If Enter has been Pressed
 
-   
+
 
     itemSelected = true;
 
@@ -132,13 +132,11 @@ void buttonControl() {
   }
 
 
-  
+
   if (buttonsPressed[5]) {  // If Back has been Pressed
 
-   pageNumber--;                  // goes back one page at whatever point the menu is at
+    pageNumber--;                  // goes back one page at whatever point the menu is at
 
     buttonsPressed[5] = false;
   }
-
-
 }

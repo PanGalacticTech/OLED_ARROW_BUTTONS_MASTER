@@ -110,8 +110,10 @@ void loop() {
 buttonRead();
 buttonControl();
 itemSelect();
-
+itemNav();
 staticMenu();
 oledUpdate();
+
+debugFunction();
   
 }

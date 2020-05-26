@@ -1,30 +1,38 @@
 //
 /* Global Variables & User Options
- * 
- * 
- *
- *
- */
 
 
 
- bool printSerial = true;
+
+*/
+
+
+
+bool printSerial = true;
+
+
+
+// These bools change how the buttons function depending on what state the program is in.
+bool scrollPage = true;
+bool scrollItem;
+bool scrollChar;
+
 
 
 // OLED Variables & Screen Buffers
- 
+
 uint8_t lineColours[8] = {1, 1, 1, 1, 1, 1, 1, 1};   // used to control line highlighting effect. 1 = Black Background, 0 = White Background Passed to oledUpdate
 
 
 //############################## Empty Screen Buffers #########################################################
-char oledLine0[23] = {"                     "}; // 
-char oledLine1[23] = {"                     "}; //  
+char oledLine0[23] = {"                     "}; //
+char oledLine1[23] = {"                     "}; //
 char oledLine2[23] = {"                     "}; //
-char oledLine3[23] = {"                     "}; //  
-char oledLine4[23] = {"                     "}; //  
-char oledLine5[23] = {"                     "}; //  
-char oledLine6[23] = {"                     "}; // 
-char oledLine7[23] = {"                     "}; //  
+char oledLine3[23] = {"                     "}; //
+char oledLine4[23] = {"                     "}; //
+char oledLine5[23] = {"                     "}; //
+char oledLine6[23] = {"                     "}; //
+char oledLine7[23] = {"                     "}; //
 
 char *screenBuffer[9] = {oledLine0, oledLine1, oledLine2 , oledLine3, oledLine4, oledLine5, oledLine6, oledLine7};
 

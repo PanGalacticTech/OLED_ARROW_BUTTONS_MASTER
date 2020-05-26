@@ -118,8 +118,41 @@ void staticMenu() {            // Updates the entire screen buffer based on the 
 
 
 
+uint8_t numberOfPages = 3;
+uint8_t numberOfItems = 8;    // max number of items per page
+uint8_t numberOfChar = 23;    // Max number of chars to fit on the screen/ Max data set. (+1 due to array size)
+
+
 
 void itemNav() {  // Function to select and highlight specific line
+
+
+  // Roll Arounds a Limits on navigation
+
+
+  // Itemnumber roll around
+  if (itemNumber > numberOfItems) {
+    itemNumber = 0;
+  } else if (itemNumber < 0) {
+    itemNumber = numberOfItems;
+  }
+
+  // Page Number Roll Around       Be careful with these, if they do not roll all the way around, turn uints for pagenumbers and itemnumbers to ints.
+  if (pageNumber > numberOfPages) {
+    pageNumber = 0;
+  } else if (pageNumber < 0) {
+    pageNumber = numberOfPages;
+  }
+  // Char Number Roll Around
+  if (charNumber > numberOfChar) {
+    charNumber = 0;
+  } else if (charNumber < 0) {
+    charNumber = numberOfChar;
+  }
+
+
+
+  // ~~~~~~~~~~~~~~~~~~ Text and Line Highlighting~~~~~~~~~~~~~~~~~~~
 
   for (int i = 0; i < 8; i++) {                         // THIS IS SO MUCH NEATER THAN MY LAST IMPLEMENTATION
 
@@ -127,9 +160,14 @@ void itemNav() {  // Function to select and highlight specific line
 
   }
 
-  lineColours[itemNumber] = 0;                     // highlight the line selected by itemNumber
-
+  if (scrollItem) {
+    lineColours[itemNumber] = 0;                     // highlight the line selected by itemNumber if itemscroll is active
+  }
 }
+
+
+
+
 
 
 
@@ -149,7 +187,10 @@ void itemSelect() {
 
       if (itemNumber == 0) {
 
+
         pageNumber = 1;                        // navigate to page 1
+        scrollPage = false;
+        scrollItem = true;
 
       } else if (itemNumber == 1) {
 
@@ -163,9 +204,15 @@ void itemSelect() {
       if (itemNumber == 0) {
 
         pageNumber = 0;    // return to page 0
+        scrollItem = false;
+        scrollPage = true;
 
       } else if (itemNumber == 1) {
 
+        pageNumber = 2;                                    // Navigate to page 2
+        scrollPage = false;
+        scrollItem = false;
+        scrollChar = true;
 
       }
 
@@ -175,10 +222,13 @@ void itemSelect() {
       //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Page 2 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     } else if (pageNumber == 2) {
 
-      pageNumber = 1;
+
 
       if (itemNumber == 0) {
 
+        pageNumber = 1;
+        scrollItem = true;
+        scrollPage = false;
 
       } else if (itemNumber == 1) {
 
