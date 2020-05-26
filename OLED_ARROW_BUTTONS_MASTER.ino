@@ -108,6 +108,9 @@ void loop() {
   
 
 buttonRead();
+buttonControl();
+itemSelect();
+
 staticMenu();
 oledUpdate();
   
