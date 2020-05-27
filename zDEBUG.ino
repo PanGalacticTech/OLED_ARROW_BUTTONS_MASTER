@@ -15,14 +15,23 @@ void debugFunction() {
 
     Serial.print("Page Number: ");
     Serial.print(pageNumber);
+       Serial.print("  Scroll: ");    
+    Serial.print(scrollPage);
+    
 
-    Serial.print("   Item Number: ");
+    Serial.print("    Item Number: ");
     Serial.print(itemNumber);
+     Serial.print("  Scroll: ");    
+    Serial.print(scrollItem);
 
-    Serial.print("   Char Number: ");
+    Serial.print("    Char Number: ");
     Serial.print(charNumber);
+     Serial.print("  Scroll: ");    
+    Serial.print(scrollChar);
 
 
+  Serial.print("   Button Locked: ");
+ Serial.print(buttonLockout);
 
 
 

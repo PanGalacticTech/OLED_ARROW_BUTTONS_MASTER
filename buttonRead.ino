@@ -70,7 +70,7 @@ void buttonControl() {
     }
   }
 
-  if (buttonStatus == allbuttonsoff) {
+  if (buttonStatus[0] == LOW && buttonStatus[1] == LOW && buttonStatus[2] == LOW && buttonStatus[3] == LOW && buttonStatus[4] == LOW && buttonStatus[5] == LOW) {   // Clunky AF
     buttonLockout = false;
   }
 
@@ -127,6 +127,7 @@ void buttonControl() {
 
 
     itemSelected = true;
+    Serial.println("itemSelected");
 
     buttonsPressed[4] = false;
   }

@@ -9,9 +9,9 @@
 */
 
 
-uint8_t pageNumber = 0;   // controls the displayed page.
-uint8_t itemNumber = 0;   // can be used to select an option on the current page.
-uint8_t charNumber = 0;    // Can be used to seek individual characters on the display.
+int8_t pageNumber = 0;   // controls the displayed page.
+int8_t itemNumber = 0;   // can be used to select an option on the current page.
+int8_t charNumber = 0;    // Can be used to seek individual characters on the display.
 
 
 uint8_t previousPage;     // Stores the last page accessed to compare and see if the page has been changed.
