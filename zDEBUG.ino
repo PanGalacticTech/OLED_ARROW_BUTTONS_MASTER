@@ -34,6 +34,9 @@ void debugFunction() {
  Serial.print(buttonLockout);
 
 
+ 
+
+
 
     Serial.println(" ");
 

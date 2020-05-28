@@ -105,15 +105,16 @@ void setup() {
 // >>>>>>>>>>>>>>>>>>>> Void Loop <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 void loop() {
-  
 
-buttonRead();
-buttonControl();
-itemSelect();
-itemNav();
-staticMenu();
-oledUpdate();
 
-debugFunction();
-  
+  buttonRead();
+  buttonControl();
+  itemSelect();
+  itemNav();
+  staticMenu();
+  oledUpdate();
+
+
+  debugFunction();
+
 }

@@ -19,15 +19,15 @@ void buttonRead() {
   for (int i = 0; i < numberofbuttons; i++) {
     buttonStatus[i] = digitalRead(buttonPins[i]);
   }
-/*
-  // Testing Output
-  if (printSerial) {
-    for (int i = 0; i < numberofbuttons; i++) {
-      Serial.print(buttonStatus[i]);
+  /*
+    // Testing Output
+    if (printSerial) {
+      for (int i = 0; i < numberofbuttons; i++) {
+        Serial.print(buttonStatus[i]);
+      }
+      Serial.println(" ");
     }
-    Serial.println(" ");
-  }
-*/
+  */
 }
 
 
@@ -59,13 +59,14 @@ void buttonControl() {
 
 
   for (int i = 0; i < 6; i++) {
-    if (buttonStatus[i] == HIGH) {
+    //  if (buttonStatus[i] == 1) {
 
-      if (!buttonLockout) {
-        buttonsPressed[i] = true;
-        buttonLockout = true;
-      }
-    } else {
+    if (!buttonLockout) {
+      buttonsPressed[i] = buttonStatus[i];
+      // buttonsPressed[i] = true;
+      buttonLockout = true;
+    }
+    else {
       buttonsPressed[i] = false;
     }
   }
@@ -82,7 +83,7 @@ void buttonControl() {
       itemNumber--;
     }
     if (scrollPage) {
-      pageNumber--;
+     // pageNumber--;
     }
     if (scrollChar) {
       // charNumber--;                         // needs a function to change the specif char in the highlighted slot.
@@ -96,7 +97,7 @@ void buttonControl() {
       itemNumber++;
     }
     if (scrollPage) {
-      pageNumber++;
+   //   pageNumber++;
     }
     if (scrollChar) {
       // charNumber++;                                      // needs a function to change the specif char in the highlighted slot.

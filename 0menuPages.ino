@@ -40,12 +40,39 @@ char *printButtons[7] = {printUP, printDOWN, printLEFT, printRIGHT, printENTER, 
 
 char settingsHeading[23] = {"Settings"};
 
-char variable1Name[23] = {"Variable One"};
-char variable2Name[23] = {"Variable Two"};
-
+char variable1Name[23] = {"VariableOne"};
+char variable2Name[23] = {"VariableTwo"};
+char variable3Name[23] = {"VariableThree"};
+char variable4Name[23] = {"VariableFour"};
+char variable5Name[23] = {"VariableFive"};
+char variable6Name[23] = {"VariableSix"};
 
 char variable1String[] = {"StringOne"};
 char variable2String[] = {"StringTwo"};
+char variable3String[] = {"StringThree"};
+char variable4String[] = {"StringFour"};
+char variable5String[] = {"StringFive"};
+char variable6String[] = {"StringSix"};
+
+
+
+
+
+
+char pageHeadingTwo[23] = {"Page Two"};
+char pageHeadingThree[23] = {"Page Three"};
+char pageHeadingFour[23] = {"Page Four"};
+
+
+char option1text[23] = {"OptionOne"};
+char option2text[23] = {"OptionTwo"};
+char option3text[23] = {"OptionThree"};
+char option4text[23] = {"OptionFour"};
+
+
+char *optionArray[5] = {option1text, option2text, option2text, option4text};
+
+uint8_t currentOption = 0;
 
 
 
@@ -98,20 +125,53 @@ void staticMenu() {            // Updates the entire screen buffer based on the 
   if (pageNumber == 2) {
 
 
-    sprintf(screenBuffer[0] , "%s", displayHeading );     // %s string of characters
+    sprintf(screenBuffer[0] , "%s", pageHeadingTwo );     // %s string of characters
 
 
-    //  sprintf(screenBuffer[1] , "%s", lineWipe );
+    sprintf(screenBuffer[1] , "%s", lineWipe );
 
-    displayButtonRead();
-
-
-    // sprintf(screenBuffer[3] , "%20s", lineWipe);
-    // sprintf(screenBuffer[4] , "%20s", lineWipe);
-    //  sprintf(screenBuffer[5] , "%20s", lineWipe);
-    // sprintf(screenBuffer[6] , "%20s", lineWipe);
-    // sprintf(screenBuffer[7] , "%20s", lineWipe);
+    sprintf(screenBuffer[3] , "%20s", optionArray[currentOption]);
+    sprintf(screenBuffer[4] , "%20s", lineWipe);
+    sprintf(screenBuffer[5] , "%20s", lineWipe);
+    sprintf(screenBuffer[6] , "%20s", lineWipe);
+    sprintf(screenBuffer[7] , "%20s", lineWipe);
   }
+
+
+  if (pageNumber == 3) {
+
+
+    sprintf(screenBuffer[0] , "%s", pageHeadingThree);     // %s string of characters
+
+
+    sprintf(screenBuffer[1] , "%s", lineWipe );
+    sprintf(screenBuffer[2] , "%s", lineWipe );
+    sprintf(screenBuffer[3] , "%s", lineWipe );
+    sprintf(screenBuffer[4] , "%20s", optionArray[currentOption]);
+
+    sprintf(screenBuffer[5] , "%20s", lineWipe);
+    sprintf(screenBuffer[6] , "%20s", lineWipe);
+    sprintf(screenBuffer[7] , "%20s", lineWipe);
+  }
+
+
+  
+  if (pageNumber == 4) {
+
+    sprintf(screenBuffer[0] , "%s", pageHeadingFour);     // %s string of characters
+
+
+    sprintf(screenBuffer[1] , "%s", lineWipe );
+    sprintf(screenBuffer[2] , "%s", lineWipe );
+    sprintf(screenBuffer[3] , "%s", lineWipe );
+    sprintf(screenBuffer[4] , "%20s", lineWipe);
+    sprintf(screenBuffer[5] , "%20s", optionArray[currentOption]);
+    sprintf(screenBuffer[6] , "%20s", lineWipe);
+    sprintf(screenBuffer[7] , "%20s", lineWipe);
+  }
+
+
+
   previousPage = pageNumber;
 }
 
