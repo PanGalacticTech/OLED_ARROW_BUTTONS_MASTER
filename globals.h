@@ -14,8 +14,18 @@ bool printSerial = true;
 
 // These bools change how the buttons function depending on what state the program is in.
 bool scrollPage = true;
-bool scrollItem;
+bool scrollItem = true;
 bool scrollChar;
+
+
+
+
+
+
+
+int8_t numberOfPages = 4;    //
+int8_t numberOfItems = 7;    // max number of items per page (should be -1 as array starts at 0)
+int8_t numberOfChar = 21;    // Max number of chars to fit on the screen/ Max data set. (+1 due to array size)
 
 
 
@@ -23,6 +33,7 @@ bool scrollChar;
 
 uint8_t lineColours[8] = {1, 1, 1, 1, 1, 1, 1, 1};   // used to control line highlighting effect. 1 = Black Background, 0 = White Background Passed to oledUpdate
 
+uint8_t PlineColours[8];   // Previous line colour
 
 //############################## Empty Screen Buffers #########################################################
 char oledLine0[23] = {"                     "}; //

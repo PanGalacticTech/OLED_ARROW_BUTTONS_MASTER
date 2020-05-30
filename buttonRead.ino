@@ -57,17 +57,16 @@ uint8_t allbuttonsoff[6] = {0, 0, 0, 0, 0, 0};
 void buttonControl() {
 
 
+  if (!buttonLockout) {
 
-  for (int i = 0; i < 6; i++) {
-    //  if (buttonStatus[i] == 1) {
+    for (int i = 0; i < 6; i++) {
 
-    if (!buttonLockout) {
       buttonsPressed[i] = buttonStatus[i];
-      // buttonsPressed[i] = true;
-      buttonLockout = true;
-    }
-    else {
-      buttonsPressed[i] = false;
+
+      if (buttonsPressed[i] == HIGH) {
+        buttonsPressed[i] = true;
+        buttonLockout = true;
+      }
     }
   }
 
@@ -78,54 +77,68 @@ void buttonControl() {
 
   // only trigger once untill buttonlockout has been lifted
 
-  if (buttonsPressed[0]) {  // If Up has been Pressed
+  if (buttonsPressed[0]) {                // If Up has been Pressed
     if (scrollItem) {
       itemNumber--;
     }
     if (scrollPage) {
-     // pageNumber--;
+      // pageNumber--;
     }
     if (scrollChar) {
       // charNumber--;                         // needs a function to change the specif char in the highlighted slot.
     }
-    buttonsPressed[0] == false;
+    buttonsPressed[0] = false;
   }
 
 
-  if (buttonsPressed[1]) {  // If Down has been Pressed
+
+  if (buttonsPressed[1]) {                  // If Down has been Pressed
     if (scrollItem) {
       itemNumber++;
     }
     if (scrollPage) {
-   //   pageNumber++;
+      //   pageNumber++;
     }
     if (scrollChar) {
       // charNumber++;                                      // needs a function to change the specif char in the highlighted slot.
     }
-    buttonsPressed[1] == false;
+    buttonsPressed[1] = false;
   }
 
 
-  if (buttonsPressed[2]) {  // If Left has been Pressed
+
+  if (buttonsPressed[2]) {                     // If Left has been Pressed
+    if (scrollPage) {
+      pageNumber--;
+    }
     if (scrollChar) {
       charNumber--;
     }
-    buttonsPressed[2] == false;
+    buttonsPressed[2] = false;
   }
 
-  if (buttonsPressed[3]) {  // If right has been Pressed
 
+  if (buttonsPressed[3]) {                 // If right has been Pressed
+    if (scrollPage) {
+      pageNumber++;
+    }
     if (scrollChar) {
       charNumber++;
     }
-    buttonsPressed[3] == false;
+    buttonsPressed[3] = false;
   }
 
 
 
-  if (buttonsPressed[4]) {  // If Enter has been Pressed
+  if (buttonsPressed[4]) {                  // If Enter has been Pressed
 
-
+    //  if (scrollPage) {
+    //    scrollPage = false;
+    //    scrollItem = true;
+    //   } else if (scrollItem) {
+    //    scrollItem = false;
+    //    scrollPage = true;
+    //   }
 
     itemSelected = true;
     Serial.println("itemSelected");
@@ -137,7 +150,14 @@ void buttonControl() {
 
   if (buttonsPressed[5]) {  // If Back has been Pressed
 
-    pageNumber--;                  // goes back one page at whatever point the menu is at
+    if (pageNumber != 0) {                 // This is the same as if(pageNumber > 0){}
+      pageNumber--;                     // goes back one page at whatever point the menu is at unless already at page 0
+    }
+
+    hiddenPageNumber = 0;                      // this could be hidden in an IF statement but at the moment that doesnt seem to be any different.
+
+
+
 
     buttonsPressed[5] = false;
   }

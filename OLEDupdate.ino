@@ -21,6 +21,11 @@ void oledUpdate() {
   }
 
   for (int i = 0; i < 8; i++) {                                     // Sets text colours   // Could also add function to change fonts based on another int array
+
+    if (lineColours[i] != PlineColours[i]){
+      screenUpdate = true;
+      PlineColours[i] = lineColours[i];                            // checks if line colours have changed and sets screen to update if it has.      
+    }
     display.setTextColor(lineColours[i], !lineColours[i]);
     display.setCursor(0, (i * 8));
     display.print(screenBuffer[i]);
@@ -31,4 +36,13 @@ void oledUpdate() {
     //   Serial.print("Oled Updated");
     screenUpdate = false;
   }
+}
+
+
+void oledWipeBuffer(){
+
+
+
+
+  
 }

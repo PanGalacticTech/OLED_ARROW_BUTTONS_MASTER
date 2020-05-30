@@ -39,7 +39,11 @@ The number of characters written so far is stored in the pointed location.
 [Width]
 
 (number) Number of characters printed. Padded with spaces
-*       width is not specified but passed as an additional integer (no idea how this works)
+*       width is not specified but passed as an additional integer as an argument eg:
+      
+int widthValue = 20;
+      
+    sprintf(screenBuffer[3], "%*c", widthValue, downArrow);
 
 
 [Precision] 
