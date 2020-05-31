@@ -62,3 +62,29 @@ L Long Double (only floating points)
 
 
 */
+
+
+
+
+
+/*
+ *  ASCII Help
+ *  
+ *   32: " "         space
+ *   
+ *   33 - 47         Punctuation
+ *   
+ *   48 - 57         0 to 9
+ *   
+ *   58 - 64         Punctuation
+ *   
+ *   65 - 90         A - Z
+ *   
+ *   91 - 96         Punctuation
+ *   
+ *   97 - 
+ * 
+ * 
+ * 
+ * 
+ */

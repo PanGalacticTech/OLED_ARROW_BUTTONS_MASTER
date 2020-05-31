@@ -85,7 +85,7 @@ void buttonControl() {
       // pageNumber--;
     }
     if (scrollChar) {
-      // charNumber--;                         // needs a function to change the specif char in the highlighted slot.
+      charUp = true;                       // needs a function to change the specif char in the highlighted slot.
     }
     buttonsPressed[0] = false;
   }
@@ -100,7 +100,7 @@ void buttonControl() {
       //   pageNumber++;
     }
     if (scrollChar) {
-      // charNumber++;                                      // needs a function to change the specif char in the highlighted slot.
+      charDown = true;                                   // needs a function to change the specif char in the highlighted slot.
     }
     buttonsPressed[1] = false;
   }
@@ -112,7 +112,9 @@ void buttonControl() {
       pageNumber--;
     }
     if (scrollChar) {
-      charNumber--;
+      if (!charSaveMode){                        // annoyingly clunky bug fix.        
+             charNumber--;          
+      } 
     }
     buttonsPressed[2] = false;
   }
@@ -156,6 +158,9 @@ void buttonControl() {
 
     hiddenPageNumber = 0;                      // this could be hidden in an IF statement but at the moment that doesnt seem to be any different.
 
+    scrollPage = true;                                 // reset these operational bools
+    scrollItem = true;
+    scrollChar = false;
 
 
 

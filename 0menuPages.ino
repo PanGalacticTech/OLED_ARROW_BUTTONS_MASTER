@@ -58,6 +58,8 @@ char variable5String[] = {"StringFive"};
 char variable6String[] = {"StringSix"};
 
 
+char string12345[23] = {"0123456789ABCDEFGHIJK"};
+
 
 
 char pageHeadingZero[23] = {"Page Zero"};
@@ -90,6 +92,8 @@ char item8Text[23] = {"itemEight"};
 
 char *itemTextArray[9] = {item1Text, item2Text, item3Text, item4Text, item5Text, item6Text, item7Text, item8Text};
 
+char saveText[23] = {"Save"};
+
 int8_t   upArrow = 0x18;    ///
 int8_t downArrow = 0x19;   ///
 
@@ -109,14 +113,14 @@ void staticMenu() {            // Updates the entire screen buffer based on the 
 
   if (previousPage != pageNumber || previousHiddenPage != hiddenPageNumber) {
 
-
-
     for (int i = 0; i < 8; i++) {
-     
-    Serial.printf("Screen Line: %i Wiped" , i);
-    Serial.println(" ");
-      
+
+      Serial.printf("Screen Line: %i Wiped" , i);
+      Serial.println(" ");
+
       sprintf(screenBuffer[i], "%22s", lineWipe);     // %s string of characters
+
+      screenUpdate = true;
       //  messageReplace(i , lineWipe);   //Clear Text Buffer recently addedm remove if problems occur
     }
   }
@@ -210,32 +214,137 @@ void staticMenu() {            // Updates the entire screen buffer based on the 
 
   if (hiddenPageNumber == 1) {                     // This will be the page to edit string one
 
-    sizeofString = sizeof(variable1String);
-
 
     sprintf(screenBuffer[0] , "%-21s", hiddenPageHeadingOne);     // %s string of characters
 
-
-    sprintf(screenBuffer[1] , "%21s", variable1Name);
-    sprintf(screenBuffer[2] , "%21i", charNumber);
-
-    // Need a way to print arrows here
-
-    //  sprintf(screenBuffer[3], "%c%s",  downArrow, lineWipe);              // Prints arrow
-  //  sprintf(screenBuffer[3], "%*s%*c%*s", charNumber , space, (sizeofString - (21 - charNumber)),  downArrow, (20-charNumber), space);
-
-    sprintf(screenBuffer[3], " %*c ", (20-charNumber+sizeofString),  downArrow);              // Prints arrow
-
-      sprintf(screenBuffer[4] , "%22s", variable1String);
-
-   // sprintf(screenBuffer[5], "%s%*c%s", space, (sizeofString - (21 - charNumber)),  upArrow, space);         // (22-(20-0)
-    //  sprintf(screenBuffer[5], "%c%s",  upArrow, lineWipe);              // Prints arrow
-
-    sprintf(screenBuffer[7], "SizeOf String: %10-u" , sizeofString);
+    stringEditPage(variable1Name, variable1String);
 
   }
 
   previousHiddenPage = hiddenPageNumber;
+
+}
+
+
+
+char editString[23];
+
+bool openString;
+
+// int16_t sizeofString;
+
+
+
+void stringEditPage(char variableName[23], char inputString[23]) {                  // passed 2 arguments name of the variable string and the string to be edited
+
+
+  //  sizeofString = (sizeof(*editString));  // -1 to account for null char
+
+
+
+  // size_t sizeofString = strlen(editString);
+
+
+
+  //  Serial.print(sizeofString);
+
+  if (openString) {                                       // if string has been opened for the first time without saving
+
+    sprintf(editString, " %s", inputString);                // copy input string to edit string with an extra space infront
+    openString = false;
+  }
+
+  sizeofString = strlen(editString);
+
+
+
+  sprintf(screenBuffer[1] , "%21s", variableName);
+
+
+  sprintf(screenBuffer[2] , "%-i%18i", editString[charNumber], charNumber);
+
+  // Need a way to print arrows here
+
+  //  sprintf(screenBuffer[3], "%c%s",  downArrow, lineWipe);              // Prints arrow
+  //  sprintf(screenBuffer[3], "%*s%*c%*s", charNumber , space, (sizeofString - (21 - charNumber)),  downArrow, (20-charNumber), space);
+
+  //    sprintf(screenBuffer[3], " %*c ", (20-charNumber+sizeofString),  downArrow);              // Prints arrow
+
+  // sprintf(screenBuffer[3], " %*c%s", charNumber + (20 - sizeofString),  downArrow, space);                                                               // closest to working
+
+  sprintf(screenBuffer[3], " %*c%*s", charNumber + (21 - sizeofString) , downArrow, (sizeofString - charNumber) , space);
+
+
+  sprintf(screenBuffer[4] , "%21s", editString);
+
+  sprintf(screenBuffer[5], " %*c%*s", charNumber + (21 - sizeofString) , upArrow, (sizeofString - charNumber) , space);
+
+  // sprintf(screenBuffer[5], "%s%*c%s", space, (sizeofString - (21 - charNumber)),  upArrow, space);         // (22-(20-0)
+  //  sprintf(screenBuffer[5], "%c%s",  upArrow, lineWipe);              // Prints arrow
+
+
+  //  sprintf(screenBuffer[6] , "%21s" , string12345);
+
+  sprintf(screenBuffer[7], "SizeOf String: %10-u" , sizeofString);
+
+
+  if (charNumber >= 0) {
+    charSaveMode = false;
+    sprintf(screenBuffer[6] , "%21s" , lineWipe);
+    lineColours[6] = 1;
+  }
+
+  // Char Number Roll Around
+  if (charNumber > sizeofString) {
+    charNumber = 0;
+  }
+
+  if (charNumber == 0) {
+    //   charNumber = (sizeofString);
+    sprintf(screenBuffer[6] , "%21s" , saveText);
+    lineColours[6] = 0;
+    charSaveMode = true;
+
+  }
+
+
+
+  if (charUp) {
+
+    editString[charNumber]++;
+
+    //  if
+
+
+
+    charUp = false;
+
+  } else if (charDown) {
+
+
+    editString[charNumber]--;
+
+    charDown = false;
+  }
+
+  // Function to add another slot to char string
+
+  if (sizeofString < 22) {
+
+    if (editString[0] != 32) {
+
+      sprintf(editString, " %s", editString);
+      charNumber++;
+
+    }
+  }
+  if (editString[0] == 32) {
+
+
+
+  }
+
+
 
 }
 
@@ -265,13 +374,14 @@ void itemNav() {  // Function to select and highlight specific line
     pageNumber = numberOfPages;
   }
 
-  // Char Number Roll Around
-  if (charNumber > numberOfChar) {
-    charNumber = 0;
-  } else if (charNumber < 0) {
-    charNumber = numberOfChar;
-  }
-
+  /*
+    // Char Number Roll Around
+    if (charNumber > numberOfChar) {
+      charNumber = 0;
+    } else if (charNumber < 0) {
+      charNumber = numberOfChar;
+    }
+  */
 
 
   // ~~~~~~~~~~~~~~~~~~ Text and Line Highlighting~~~~~~~~~~~~~~~~~~~
@@ -343,10 +453,12 @@ void itemSelect() {
         //   scrollChar = true;
       } else if (itemNumber == 3) {
 
+        //   oledWipeBuffer();
         hiddenPageNumber = 1;                           // Navigate to hiddenPageNumber 1
         scrollPage = false;
         scrollItem = false;
         scrollChar = true;
+        openString = true;
 
       }  else if (itemNumber == 4) {
 
@@ -377,14 +489,23 @@ void itemSelect() {
 
 
       }
-
-
-
-
-
     }
 
 
+    if (charSaveMode) {                      // if enter is pressed while in char save mode string is saved and navigated back to the page it started at
+
+      pageNumber = 1;
+      hiddenPageNumber = 0;
+      charNumber = 0;
+      charSaveMode = false;
+
+      scrollItem = true;
+      scrollPage = true;
+      scrollChar = false;
+
+      oledWipeBuffer();
+
+    }
 
 
 

@@ -29,7 +29,16 @@ int8_t numberOfChar = 21;    // Max number of chars to fit on the screen/ Max da
 
 
 
+bool charSaveMode;  // when true this triggers char save mode.
+
+
+bool charUp;
+bool charDown;
+
 // OLED Variables & Screen Buffers
+
+
+bool screenUpdate = false;
 
 uint8_t lineColours[8] = {1, 1, 1, 1, 1, 1, 1, 1};   // used to control line highlighting effect. 1 = Black Background, 0 = White Background Passed to oledUpdate
 

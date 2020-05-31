@@ -1,13 +1,12 @@
 
 /*   Functions to Control the OLED screen Buffer
- * 
- * 
- * 
- * 
- */
 
 
-bool screenUpdate = false;
+
+
+*/
+
+
 
 
 void oledUpdate() {
@@ -22,9 +21,9 @@ void oledUpdate() {
 
   for (int i = 0; i < 8; i++) {                                     // Sets text colours   // Could also add function to change fonts based on another int array
 
-    if (lineColours[i] != PlineColours[i]){
+    if (lineColours[i] != PlineColours[i]) {
       screenUpdate = true;
-      PlineColours[i] = lineColours[i];                            // checks if line colours have changed and sets screen to update if it has.      
+      PlineColours[i] = lineColours[i];                            // checks if line colours have changed and sets screen to update if it has.
     }
     display.setTextColor(lineColours[i], !lineColours[i]);
     display.setCursor(0, (i * 8));
@@ -39,10 +38,20 @@ void oledUpdate() {
 }
 
 
-void oledWipeBuffer(){
+void oledWipeBuffer() {
 
 
 
 
-  
+  sprintf(screenBuffer[0] , "%22s", lineWipe );
+  sprintf(screenBuffer[1] , "%22s", lineWipe );
+  sprintf(screenBuffer[2] , "%22s", lineWipe );
+  sprintf(screenBuffer[3] , "%22s", lineWipe);
+  sprintf(screenBuffer[4] , "%22s", lineWipe);
+  sprintf(screenBuffer[5] , "%22s", lineWipe);
+  sprintf(screenBuffer[6] , "%22s", lineWipe);
+  sprintf(screenBuffer[7] , "%22s", lineWipe );
+
+
+
 }
