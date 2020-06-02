@@ -19,6 +19,9 @@ bool scrollChar;
 
 
 
+uint8_t charSelect;
+
+
 
 
 

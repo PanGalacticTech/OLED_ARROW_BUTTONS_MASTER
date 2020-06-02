@@ -215,7 +215,7 @@ void staticMenu() {            // Updates the entire screen buffer based on the 
   if (hiddenPageNumber == 1) {                     // This will be the page to edit string one
 
 
-    sprintf(screenBuffer[0] , "%-21s", hiddenPageHeadingOne);     // %s string of characters
+    sprintf(screenBuffer[0] , "%21s", hiddenPageHeadingOne);     // %s string of characters
 
     stringEditPage(variable1Name, variable1String);
 
@@ -233,116 +233,131 @@ bool openString;
 
 // int16_t sizeofString;
 
+uint8_t inStringLength;
 
+void stringEditPage(char variableName[23], char inputString[23]) {                  // passed 2 arguments name of the variable string and the string to be edited (also will need some reference to the origonal string to save, unless this entire routine can be passed as and argument
 
-void stringEditPage(char variableName[23], char inputString[23]) {                  // passed 2 arguments name of the variable string and the string to be edited
-
-
-  //  sizeofString = (sizeof(*editString));  // -1 to account for null char
-
-
-
-  // size_t sizeofString = strlen(editString);
-
-
-
-  //  Serial.print(sizeofString);
+ inStringLength = strlen(inputString);  
 
   if (openString) {                                       // if string has been opened for the first time without saving
 
-    sprintf(editString, " %s", inputString);                // copy input string to edit string with an extra space infront
+    sprintf(editString, "%20s", inputString);                // copy input string to edit string that is 22 chars long 
+
+    charNumber = 20-inStringLength;
     openString = false;
   }
 
-  sizeofString = strlen(editString);
+  sizeofString = strlen(editString);                // this should always return 23 // or 22
+
+Serial.print("size of string: ");
+Serial.println(sizeofString);
 
 
-
-  sprintf(screenBuffer[1] , "%21s", variableName);
-
-
-  sprintf(screenBuffer[2] , "%-i%18i", editString[charNumber], charNumber);
-
-  // Need a way to print arrows here
-
-  //  sprintf(screenBuffer[3], "%c%s",  downArrow, lineWipe);              // Prints arrow
-  //  sprintf(screenBuffer[3], "%*s%*c%*s", charNumber , space, (sizeofString - (21 - charNumber)),  downArrow, (20-charNumber), space);
-
-  //    sprintf(screenBuffer[3], " %*c ", (20-charNumber+sizeofString),  downArrow);              // Prints arrow
-
-  // sprintf(screenBuffer[3], " %*c%s", charNumber + (20 - sizeofString),  downArrow, space);                                                               // closest to working
-
-  sprintf(screenBuffer[3], " %*c%*s", charNumber + (21 - sizeofString) , downArrow, (sizeofString - charNumber) , space);
+  sprintf(screenBuffer[1] , "%-21s", variableName);                                   // name of the data point that is being edited
 
 
-  sprintf(screenBuffer[4] , "%21s", editString);
-
-  sprintf(screenBuffer[5], " %*c%*s", charNumber + (21 - sizeofString) , upArrow, (sizeofString - charNumber) , space);
-
-  // sprintf(screenBuffer[5], "%s%*c%s", space, (sizeofString - (21 - charNumber)),  upArrow, space);         // (22-(20-0)
-  //  sprintf(screenBuffer[5], "%c%s",  upArrow, lineWipe);              // Prints arrow
+ // sprintf(screenBuffer[2] , "%-i%18i", editString[charNumber], charNumber);         // prints the int value of the char to the left of the screen, the currently selected char to the right of the screen
 
 
-  //  sprintf(screenBuffer[6] , "%21s" , string12345);
+  sprintf(screenBuffer[3], " %*c%*s", charNumber + (21 - sizeofString) , downArrow, (sizeofString - charNumber) , space);    // prints an arrow above the active char
 
-  sprintf(screenBuffer[7], "SizeOf String: %10-u" , sizeofString);
 
+  sprintf(screenBuffer[4] , "%21s", editString);                                                                             // string that is being edited
+
+
+  sprintf(screenBuffer[5], " %*c%*s", charNumber + (21 - sizeofString) , upArrow, (sizeofString - charNumber) , space);       // prints arrow below active char
+
+
+ sprintf(screenBuffer[6] , "%21s" , saveText);   
+
+  sprintf(screenBuffer[7], "SizeOf String: %10-u" , sizeofString);                                                           // Prints size of string, this should always return 23 now.
+
+  
 
   if (charNumber >= 0) {
     charSaveMode = false;
-    sprintf(screenBuffer[6] , "%21s" , lineWipe);
+                                                                           // Changed it so it always prints save, but should only highlight save when we want savemode to be active.
     lineColours[6] = 1;
   }
 
   // Char Number Roll Around
-  if (charNumber > sizeofString) {
+  if (charNumber > 22) {
     charNumber = 0;
   }
 
   if (charNumber == 0) {
-    //   charNumber = (sizeofString);
-    sprintf(screenBuffer[6] , "%21s" , saveText);
+
+
     lineColours[6] = 0;
-    charSaveMode = true;
+  //  charSaveMode = true;                                                                                 // charSaveMode = true needs to be added to enter button while this page is active
 
   }
 
 
 
-  if (charUp) {
-
-    editString[charNumber]++;
-
-    //  if
+  if (charUp) {                                                       // All of this is broken right now
 
 
 
-    charUp = false;
+    charSelect = uint8_t (editString[charNumber]);                           // unsigned int passed char that is saved in editString the currently selected char. I think this needs to be a CAST to int
+
+//    Serial.print(charSelect);                                                    // Serial print this int
+
+  //  charSelect = charRemap(charSelect, 1);                                     // int that pertains to a specific char is passed to remap function, along with direction the char needs to move
+                                                                               // this function needs to take this int, remap it to our new table, add one or minus one, then translate the int back to
+                                                                                // the int that relates to the new char from the table.
+ 
+
+   
+
+ //   editString[charNumber] =  char(charSelect);                            // that int is then passed back to editString{charNumber] so this needs to be a cast to a char. 
+                                                                            // this can be passed directly it doesnt need to be split into 2 lines
+ editString[charNumber] = char(charRemap(charSelect, 1));                        
+
+ //   Serial.print(editString[charNumber]);                                         // Serialprint the edited char 
+  //  Serial.print(" ");
+  //  Serial.print(" ");
+    charUp = false;                                                          // action has been performed, flag can be unset
+
 
   } else if (charDown) {
 
+    charSelect = uint8_t (editString[charNumber]);                           // unsigned int passed char that is saved in editString the currently selected char. I think this needs to be a CAST to int
 
-    editString[charNumber]--;
+ //   Serial.print(charSelect);                                                    // Serial print this int
+
+  //  charSelect = charRemap(charSelect, 1);                                     // int that pertains to a specific char is passed to remap function, along with direction the char needs to move
+                                                                               // this function needs to take this int, remap it to our new table, add one or minus one, then translate the int back to
+                                                                                // the int that relates to the new char from the table.
+
+   
+ //   editString[charNumber] =  char(charSelect);                            // that int is then passed back to editString{charNumber] so this needs to be a cast to a char. 
+                                                                            // this can be passed directly it doesnt need to be split into 2 lines
+ editString[charNumber] = char(charRemap(charSelect, 0));                        
+
+ //   Serial.print(editString[charNumber]);                                         // Serialprint the edited char 
+ //   Serial.print(" ");
+ //   Serial.print(" ");
 
     charDown = false;
   }
 
-  // Function to add another slot to char string
+  // Function to add another slot to char string // Redundent
 
-  if (sizeofString < 22) {
+  /*
+    if (sizeofString < 22) {
 
-    if (editString[0] != 32) {
+      if (editString[0] != 32) {
 
-      sprintf(editString, " %s", editString);
-      charNumber++;
+        sprintf(editString, " %s", editString);
+        charNumber++;
 
+      }
     }
-  }
-  if (editString[0] == 32) {
+    if (editString[0] == 32) {
 
-
-
-  }
+  */
+  // This is all redundent now (I hope)
 
 
 

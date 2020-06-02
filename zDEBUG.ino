@@ -39,8 +39,8 @@ void debugFunction() {
       //    Serial.print("  Scroll: ");
       //    Serial.print(scrollItem);
 
-      Serial.print("    Char Number: ");
-      Serial.print(charNumber);
+   //   Serial.print("    Char Number: ");
+   //   Serial.print(charNumber);
       //    Serial.print("  Scroll: ");
       //    Serial.print(scrollChar);
 
@@ -53,7 +53,7 @@ void debugFunction() {
 
 
 
-      Serial.println(" ");
+   //   Serial.println(" ");
 
       /*
         // Testing Output
