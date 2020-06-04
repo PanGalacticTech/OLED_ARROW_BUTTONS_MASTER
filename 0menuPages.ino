@@ -115,8 +115,8 @@ void staticMenu() {            // Updates the entire screen buffer based on the 
 
     for (int i = 0; i < 8; i++) {
 
-      Serial.printf("Screen Line: %i Wiped" , i);
-      Serial.println(" ");
+       Serial.printf("Screen Line: %i Wiped" , i);
+       Serial.println(" ");
 
       sprintf(screenBuffer[i], "%22s", lineWipe);     // %s string of characters
 
@@ -208,7 +208,7 @@ void staticMenu() {            // Updates the entire screen buffer based on the 
 
 
 
-    previousPage = pageNumber;
+    //  previousPage = pageNumber;
 
   }
 
@@ -221,6 +221,7 @@ void staticMenu() {            // Updates the entire screen buffer based on the 
 
   }
 
+  previousPage = pageNumber;
   previousHiddenPage = hiddenPageNumber;
 
 }
@@ -235,61 +236,67 @@ bool openString;
 
 uint8_t inStringLength;
 
+
 void stringEditPage(char variableName[23], char inputString[23]) {                  // passed 2 arguments name of the variable string and the string to be edited (also will need some reference to the origonal string to save, unless this entire routine can be passed as and argument
 
- inStringLength = strlen(inputString);  
+  inStringLength = strlen(inputString);
 
   if (openString) {                                       // if string has been opened for the first time without saving
 
-    sprintf(editString, "%20s", inputString);                // copy input string to edit string that is 22 chars long 
+    sprintf(editString, "%21s", inputString);                // copy input string to edit string that is 22 chars long   changed from 20 to 21
 
-    charNumber = 20-inStringLength;
+    charNumber = 21 - inStringLength;                           // This line makes sure cursor is highlighting first character in string
     openString = false;
   }
 
-  sizeofString = strlen(editString);                // this should always return 23 // or 22
+  sizeofString = strlen(editString);                // this should always return 21
 
-Serial.print("size of string: ");
-Serial.println(sizeofString);
+  //  Serial.print("size of string: ");
+  // Serial.println(sizeofString);
 
 
   sprintf(screenBuffer[1] , "%-21s", variableName);                                   // name of the data point that is being edited
 
 
- // sprintf(screenBuffer[2] , "%-i%18i", editString[charNumber], charNumber);         // prints the int value of the char to the left of the screen, the currently selected char to the right of the screen
+  sprintf(screenBuffer[2] , "%-i              %i   ", editString[charNumber], charNumber);         // prints the int value of the char to the left of the screen, the currently selected char to the right of the screen
 
 
-  sprintf(screenBuffer[3], " %*c%*s", charNumber + (21 - sizeofString) , downArrow, (sizeofString - charNumber) , space);    // prints an arrow above the active char
 
 
-  sprintf(screenBuffer[4] , "%21s", editString);                                                                             // string that is being edited
+  sprintf(screenBuffer[3], "%*c%*s", charNumber + (22 - sizeofString) , downArrow, (sizeofString - charNumber) , space);    // prints an arrow above the active char    //21 or 22 on this line
+
+  // sprintf(screenBuffer[3], "%*c", charNumber + (22 - sizeofString) , downArrow);    // prints an arrow above the active char    //21 or 22 on this line
 
 
-  sprintf(screenBuffer[5], " %*c%*s", charNumber + (21 - sizeofString) , upArrow, (sizeofString - charNumber) , space);       // prints arrow below active char
+
+  sprintf(screenBuffer[4] , "%21s", editString);                                                                             // string that is being edited                    // 21 or 22 on this line
 
 
- sprintf(screenBuffer[6] , "%21s" , saveText);   
+  sprintf(screenBuffer[5], "%*c%*s", charNumber + (22 - sizeofString) , upArrow, (sizeofString - charNumber) , space);       // prints arrow below active char
 
-  sprintf(screenBuffer[7], "SizeOf String: %10-u" , sizeofString);                                                           // Prints size of string, this should always return 23 now.
 
-  
+  sprintf(screenBuffer[6] , "%-20s" , saveText);
 
-  if (charNumber >= 0) {
-    charSaveMode = false;
-                                                                           // Changed it so it always prints save, but should only highlight save when we want savemode to be active.
-    lineColours[6] = 1;
+  //sprintf(screenBuffer[7], "SizeOf String: %10-u" , sizeofString);                                                           // Prints size of string, this should always return 23 now.
+
+
+
+  if (charNumber < 0) {
+    // charSaveMode = false;
+    charNumber = 20;                                                          // Changed it so it always prints save, but should only highlight save when we want savemode to be active.
+    //  lineColours[6] = 1;
   }
 
   // Char Number Roll Around
-  if (charNumber > 22) {
+  if (charNumber > 20) {
     charNumber = 0;
   }
 
   if (charNumber == 0) {
 
 
-    lineColours[6] = 0;
-  //  charSaveMode = true;                                                                                 // charSaveMode = true needs to be added to enter button while this page is active
+    //  lineColours[6] = 0;
+    //  charSaveMode = true;                                                                                 // charSaveMode = true needs to be added to enter button while this page is active
 
   }
 
@@ -301,22 +308,22 @@ Serial.println(sizeofString);
 
     charSelect = uint8_t (editString[charNumber]);                           // unsigned int passed char that is saved in editString the currently selected char. I think this needs to be a CAST to int
 
-//    Serial.print(charSelect);                                                    // Serial print this int
+    //    Serial.print(charSelect);                                                    // Serial print this int
 
-  //  charSelect = charRemap(charSelect, 1);                                     // int that pertains to a specific char is passed to remap function, along with direction the char needs to move
-                                                                               // this function needs to take this int, remap it to our new table, add one or minus one, then translate the int back to
-                                                                                // the int that relates to the new char from the table.
- 
+    //  charSelect = charRemap(charSelect, 1);                                     // int that pertains to a specific char is passed to remap function, along with direction the char needs to move
+    // this function needs to take this int, remap it to our new table, add one or minus one, then translate the int back to
+    // the int that relates to the new char from the table.
 
-   
 
- //   editString[charNumber] =  char(charSelect);                            // that int is then passed back to editString{charNumber] so this needs to be a cast to a char. 
-                                                                            // this can be passed directly it doesnt need to be split into 2 lines
- editString[charNumber] = char(charRemap(charSelect, 1));                        
 
- //   Serial.print(editString[charNumber]);                                         // Serialprint the edited char 
-  //  Serial.print(" ");
-  //  Serial.print(" ");
+
+    //   editString[charNumber] =  char(charSelect);                            // that int is then passed back to editString{charNumber] so this needs to be a cast to a char.
+    // this can be passed directly it doesnt need to be split into 2 lines
+    editString[charNumber] = char(charRemap(charSelect, 1));
+
+    //   Serial.print(editString[charNumber]);                                         // Serialprint the edited char
+    //  Serial.print(" ");
+    //  Serial.print(" ");
     charUp = false;                                                          // action has been performed, flag can be unset
 
 
@@ -324,20 +331,20 @@ Serial.println(sizeofString);
 
     charSelect = uint8_t (editString[charNumber]);                           // unsigned int passed char that is saved in editString the currently selected char. I think this needs to be a CAST to int
 
- //   Serial.print(charSelect);                                                    // Serial print this int
+    //   Serial.print(charSelect);                                                    // Serial print this int
 
-  //  charSelect = charRemap(charSelect, 1);                                     // int that pertains to a specific char is passed to remap function, along with direction the char needs to move
-                                                                               // this function needs to take this int, remap it to our new table, add one or minus one, then translate the int back to
-                                                                                // the int that relates to the new char from the table.
+    //  charSelect = charRemap(charSelect, 1);                                     // int that pertains to a specific char is passed to remap function, along with direction the char needs to move
+    // this function needs to take this int, remap it to our new table, add one or minus one, then translate the int back to
+    // the int that relates to the new char from the table.
 
-   
- //   editString[charNumber] =  char(charSelect);                            // that int is then passed back to editString{charNumber] so this needs to be a cast to a char. 
-                                                                            // this can be passed directly it doesnt need to be split into 2 lines
- editString[charNumber] = char(charRemap(charSelect, 0));                        
 
- //   Serial.print(editString[charNumber]);                                         // Serialprint the edited char 
- //   Serial.print(" ");
- //   Serial.print(" ");
+    //   editString[charNumber] =  char(charSelect);                            // that int is then passed back to editString{charNumber] so this needs to be a cast to a char.
+    // this can be passed directly it doesnt need to be split into 2 lines
+    editString[charNumber] = char(charRemap(charSelect, 0));
+
+    //   Serial.print(editString[charNumber]);                                         // Serialprint the edited char
+    //   Serial.print(" ");
+    //   Serial.print(" ");
 
     charDown = false;
   }
@@ -383,12 +390,13 @@ void itemNav() {  // Function to select and highlight specific line
   }
 
   // Page Number Roll Around
+  if (pageNumber != 9){                                    // bug fix to deal with my stupid idea of making page 9 null rather than page 0
   if (pageNumber > numberOfPages) {
     pageNumber = 0;
   } else if (pageNumber < 0) {
     pageNumber = numberOfPages;
   }
-
+  }
   /*
     // Char Number Roll Around
     if (charNumber > numberOfChar) {
@@ -401,6 +409,8 @@ void itemNav() {  // Function to select and highlight specific line
 
   // ~~~~~~~~~~~~~~~~~~ Text and Line Highlighting~~~~~~~~~~~~~~~~~~~
 
+  if (pageNumber != 9){                                                                                                        // Another Bug fix to handle when displaying hidden pages and page 9 is null
+
   for (int i = 0; i < numberOfItems + 1; i++) {                       // THIS IS SO MUCH NEATER THAN MY LAST IMPLEMENTATION
 
     lineColours[i] = 1;                       // Turn all highlighted lines off
@@ -411,7 +421,7 @@ void itemNav() {  // Function to select and highlight specific line
     lineColours[itemNumber] = 0;                     // highlight the line selected by itemNumber if itemscroll is active
   }
 }
-
+}
 
 
 
@@ -427,6 +437,9 @@ void itemSelect() {
 
   if (itemSelected) {
 
+
+Serial.printf("itemSelected Page: %i Item: %i hp: %i", pageNumber, itemNumber, hiddenPageNumber);
+Serial.println(" ");
 
     //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Page 0 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -470,10 +483,13 @@ void itemSelect() {
 
         //   oledWipeBuffer();
         hiddenPageNumber = 1;                           // Navigate to hiddenPageNumber 1
+        pageNumber = 9;                                // this just needs to be any page not previously used. In future might make this 0 and move every page up one
         scrollPage = false;
         scrollItem = false;
         scrollChar = true;
         openString = true;
+        oledWipeHighlight();
+        
 
       }  else if (itemNumber == 4) {
 
@@ -505,9 +521,32 @@ void itemSelect() {
 
       }
     }
+    
+    else if (charSaveMode){                              // Function here to save editString into the variable that was passed to it. I think this is a tomorro job now.
+
+flashLine = 6;
+   triggerFlashBar = true;
+   returnPage = 1;    // sets to return to page 1 when animation finished
+ returnItem = 0;
+  animationTimer = millis();    // bug fix would like this to be more self contained in animation function
+  
+   // save char here
+   
+
+      
+    }
+
+    else if (hiddenPageNumber == 1) {
+      Serial.println("TEST LOCATION 1");
+      scrollChar = false;
+      charSaveMode = true;
+      lineColours[6] = 0;
+
+       }
 
 
-    if (charSaveMode) {                      // if enter is pressed while in char save mode string is saved and navigated back to the page it started at
+    /*
+      else if (charSaveMode) {                      // if enter is pressed while in char save mode string is saved and navigated back to the page it started at
 
       pageNumber = 1;
       hiddenPageNumber = 0;
@@ -520,7 +559,11 @@ void itemSelect() {
 
       oledWipeBuffer();
 
-    }
+      }
+
+    */
+
+
 
 
 

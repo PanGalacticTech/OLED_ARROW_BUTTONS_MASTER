@@ -38,6 +38,18 @@ void oledUpdate() {
 }
 
 
+void oledWipeHighlight(){          // Script to wipe all highlighted lines 
+
+  for (int i = 0; i < numberOfItems + 1; i++) {                       // THIS IS SO MUCH NEATER THAN MY LAST IMPLEMENTATION
+
+    lineColours[i] = 1;                       // Turn all highlighted lines off
+
+  }
+  
+}
+
+
+
 void oledWipeBuffer() {
 
 

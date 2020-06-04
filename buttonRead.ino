@@ -112,9 +112,9 @@ void buttonControl() {
       pageNumber--;
     }
     if (scrollChar) {
-      if (!charSaveMode){                        // annoyingly clunky bug fix.        
-             charNumber--;          
-      } 
+      if (!charSaveMode) {                       // annoyingly clunky bug fix.
+        charNumber--;
+      }
     }
     buttonsPressed[2] = false;
   }
@@ -143,7 +143,7 @@ void buttonControl() {
     //   }
 
     itemSelected = true;
-    Serial.println("itemSelected");
+    //  Serial.println("itemSelected");
 
     buttonsPressed[4] = false;
   }
@@ -152,15 +152,25 @@ void buttonControl() {
 
   if (buttonsPressed[5]) {  // If Back has been Pressed
 
+   if (!charSaveMode) {                         // when char save mode is active we want the back button to only return to being able to edit the string      
+    
     if (pageNumber != 0) {                 // This is the same as if(pageNumber > 0){}
       pageNumber--;                     // goes back one page at whatever point the menu is at unless already at page 0
     }
 
-    hiddenPageNumber = 0;                      // this could be hidden in an IF statement but at the moment that doesnt seem to be any different.
+                          
+      hiddenPageNumber = 0;                      // 
+      scrollPage = true;                                 // reset these operational bools
+      scrollItem = true;
+      scrollChar = false;
 
-    scrollPage = true;                                 // reset these operational bools
-    scrollItem = true;
-    scrollChar = false;
+    } else {
+      charSaveMode = false;
+      lineColours[6] = 1;
+      scrollChar = true;
+    }
+
+
 
 
 

@@ -114,6 +114,9 @@ void loop() {
   staticMenu();
   oledUpdate();
 
+  flashingBar(flashLine);
+animationEnd(returnPage);  
+ // animationEnd(returnPage, returnItem);
 
   debugFunction();
 

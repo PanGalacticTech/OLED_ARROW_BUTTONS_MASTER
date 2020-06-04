@@ -22,7 +22,22 @@ bool scrollChar;
 uint8_t charSelect;
 
 
+// Animation Variables
 
+
+bool animationFinished;                // this can be used to tell other function that animation has finished so pages can return to their stable state
+
+bool triggerFlashBar = false;
+
+unsigned long flashingDelay = 200;    // delay between flashes
+unsigned long lastFlash;
+
+unsigned long animationTime = 700;         // length of time to perform animation
+unsigned long animationTimer;          // Timer for time flashing
+int flashLine;   // int to hold number of line to flash. will only work one at a time 
+// function can set flashLine as a line number, then set triggerFlashbar = true and animation will flash untill timers are up. this function is called in main loop as flashingBar(flashLine);
+int8_t returnPage;    // place to return to after animations finished.
+int8_t returnItem;
 
 
 
