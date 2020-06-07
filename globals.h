@@ -8,6 +8,15 @@
 
 
 
+// Configuration Variables//
+
+// These variables are ones that would be saved into a re-writeable config file.
+// Defaults will be saved perminantly in flash here
+
+
+
+
+
 bool printSerial = true;
 
 

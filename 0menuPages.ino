@@ -115,8 +115,8 @@ void staticMenu() {            // Updates the entire screen buffer based on the 
 
     for (int i = 0; i < 8; i++) {
 
-       Serial.printf("Screen Line: %i Wiped" , i);
-       Serial.println(" ");
+      Serial.printf("Screen Line: %i Wiped" , i);
+      Serial.println(" ");
 
       sprintf(screenBuffer[i], "%22s", lineWipe);     // %s string of characters
 
@@ -228,6 +228,9 @@ void staticMenu() {            // Updates the entire screen buffer based on the 
 
 
 
+
+
+
 char editString[23];
 
 bool openString;
@@ -237,7 +240,11 @@ bool openString;
 uint8_t inStringLength;
 
 
-void stringEditPage(char variableName[23], char inputString[23]) {                  // passed 2 arguments name of the variable string and the string to be edited (also will need some reference to the origonal string to save, unless this entire routine can be passed as and argument
+
+
+//void stringEditPage(char variableName[23], char inputString[23]) {                  // passed 2 arguments name of the variable string and the string to be edited (also will need some reference to the origonal string to save, unless this entire routine can be passed as and argument
+
+void stringEditPage(char variableName[23], char inputString[23]) {
 
   inStringLength = strlen(inputString);
 
@@ -368,8 +375,8 @@ void stringEditPage(char variableName[23], char inputString[23]) {              
 
 
 
-}
 
+}
 
 
 
@@ -390,12 +397,12 @@ void itemNav() {  // Function to select and highlight specific line
   }
 
   // Page Number Roll Around
-  if (pageNumber != 9){                                    // bug fix to deal with my stupid idea of making page 9 null rather than page 0
-  if (pageNumber > numberOfPages) {
-    pageNumber = 0;
-  } else if (pageNumber < 0) {
-    pageNumber = numberOfPages;
-  }
+  if (pageNumber != 9) {                                   // bug fix to deal with my stupid idea of making page 9 null rather than page 0
+    if (pageNumber > numberOfPages) {
+      pageNumber = 0;
+    } else if (pageNumber < 0) {
+      pageNumber = numberOfPages;
+    }
   }
   /*
     // Char Number Roll Around
@@ -409,18 +416,18 @@ void itemNav() {  // Function to select and highlight specific line
 
   // ~~~~~~~~~~~~~~~~~~ Text and Line Highlighting~~~~~~~~~~~~~~~~~~~
 
-  if (pageNumber != 9){                                                                                                        // Another Bug fix to handle when displaying hidden pages and page 9 is null
+  if (pageNumber != 9) {                                                                                                       // Another Bug fix to handle when displaying hidden pages and page 9 is null
 
-  for (int i = 0; i < numberOfItems + 1; i++) {                       // THIS IS SO MUCH NEATER THAN MY LAST IMPLEMENTATION
+    for (int i = 0; i < numberOfItems + 1; i++) {                       // THIS IS SO MUCH NEATER THAN MY LAST IMPLEMENTATION
 
-    lineColours[i] = 1;                       // Turn all highlighted lines off
+      lineColours[i] = 1;                       // Turn all highlighted lines off
 
+    }
+
+    if (scrollItem) {
+      lineColours[itemNumber] = 0;                     // highlight the line selected by itemNumber if itemscroll is active
+    }
   }
-
-  if (scrollItem) {
-    lineColours[itemNumber] = 0;                     // highlight the line selected by itemNumber if itemscroll is active
-  }
-}
 }
 
 
@@ -438,8 +445,8 @@ void itemSelect() {
   if (itemSelected) {
 
 
-Serial.printf("itemSelected Page: %i Item: %i hp: %i", pageNumber, itemNumber, hiddenPageNumber);
-Serial.println(" ");
+    Serial.printf("itemSelected Page: %i Item: %i hp: %i", pageNumber, itemNumber, hiddenPageNumber);
+    Serial.println(" ");
 
     //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Page 0 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -489,7 +496,7 @@ Serial.println(" ");
         scrollChar = true;
         openString = true;
         oledWipeHighlight();
-        
+
 
       }  else if (itemNumber == 4) {
 
@@ -521,28 +528,31 @@ Serial.println(" ");
 
       }
     }
-    
-    else if (charSaveMode){                              // Function here to save editString into the variable that was passed to it. I think this is a tomorro job now.
 
-flashLine = 6;
-   triggerFlashBar = true;
-   returnPage = 1;    // sets to return to page 1 when animation finished
- returnItem = 0;
-  animationTimer = millis();    // bug fix would like this to be more self contained in animation function
-  
-   // save char here
-   
+    else if (charSaveMode) {                             // Function here to save editString into the variable that was passed to it. I think this is a tomorro job now.
 
-      
+      flashLine = 6;
+      triggerFlashBar = true;
+      returnPage = 1;    // sets to return to page 1 when animation finished
+      returnItem = 0;
+      scrollItem = true;
+      scrollPage = true;
+      animationTimer = millis();    // bug fix would like this to be more self contained in animation function
+
+      // save char here
+      //     *variable1String = saveCharString();
+      saveCharString();
+
+
     }
 
     else if (hiddenPageNumber == 1) {
-      Serial.println("TEST LOCATION 1");
+      // Serial.println("TEST LOCATION 1");
       scrollChar = false;
       charSaveMode = true;
       lineColours[6] = 0;
 
-       }
+    }
 
 
     /*
@@ -565,14 +575,77 @@ flashLine = 6;
 
 
 
-
-
-
-
-
-
-
-
     itemSelected = false;
   }
+}
+
+
+
+
+
+
+// returns whatever is in editString without leading zeros
+
+void saveCharString() {
+
+  uint8_t x;    // value to save location of the start of the string
+  uint8_t z = 0 ;       // variable to accumilate and cycle through array seperate to the for loop
+  bool startTranslate = false;   // bool used to start translation of char string into shorter string
+
+  // this string cuts off any leading zeros from our edit string
+
+  sizeofString = strlen(variable1String);                // this should return something smaller than 21
+
+  Serial.printf(" Pre Translation: %s Length: %u", variable1String, sizeofString);
+  Serial.println(" ");
+
+
+  for (int i = 0 ; i < 20; i++) {
+
+    if (!startTranslate) {
+      if (editString[i] != 32) {         // if input string does not contain a leading space
+
+        Serial.println(i);
+
+        x = i;                            // record number of leading spaces
+        startTranslate = true;
+      }
+    }
+  }
+
+  startTranslate = false;
+
+  for (int i = x; i < 20; i++) {
+
+
+
+    Serial.println(z);
+
+    variable1String[z] = editString[i];
+
+    z++;
+  }
+
+  // this should have switched everything out fairly robustly.
+
+
+  //probably need to wipe editString here though
+
+   sprintf(editString , "%20s" , lineWipe);
+
+
+  Serial.printf("Post Translation: %s Length: %u", variable1String, sizeofString);
+  Serial.println(" ");
+
+  //sprintf(shorterString, "%s", editString);
+
+  // sprintf(variable1String, "%s", editString);                        // this doesnt work as it doesnt shorten string and remove leading spaces
+
+  sizeofString = strlen(variable1String);                // this should return something smaller than 21
+
+  sprintf(screenBuffer[6] , "%-20s Chars Saved: %u" , saveText, sizeofString);
+
+  /// delay(2000);   // just for testing
+
+  //return &shorterString;
 }

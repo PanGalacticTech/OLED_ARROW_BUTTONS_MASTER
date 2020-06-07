@@ -28,7 +28,7 @@ void displayButtonRead() {
 
   for (int i = 0; i < 6; i++) {
 
-    sprintf(screenBuffer[i + 2] , "%-18s %u", printButtons[i], buttonStatus[i]);
+    sprintf(screenBuffer[i + 2] , "%-18s %u ", printButtons[i], buttonStatus[i]);
 
   }
 
