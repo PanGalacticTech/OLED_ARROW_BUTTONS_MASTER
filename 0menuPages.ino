@@ -50,12 +50,12 @@ char variable4Name[23] = {"VariableFour"};
 char variable5Name[23] = {"VariableFive"};
 char variable6Name[23] = {"VariableSix"};
 
-char variable1String[] = {"StringOne"};
-char variable2String[] = {"StringTwo"};
-char variable3String[] = {"StringThree"};
-char variable4String[] = {"StringFour"};
-char variable5String[] = {"StringFive"};
-char variable6String[] = {"StringSix"};
+char variable1String[23] = {"StringOne"};
+char variable2String[23] = {"StringTwo"};
+char variable3String[23] = {"StringThree"};
+char variable4String[23] = {"StringFour"};
+char variable5String[23] = {"StringFive"};
+char variable6String[23] = {"StringSix"};
 
 
 char string12345[23] = {"0123456789ABCDEFGHIJK"};
@@ -151,8 +151,14 @@ void staticMenu() {            // Updates the entire screen buffer based on the 
 
       sprintf(screenBuffer[1] , "%-21s", pageHeadingOne);
 
-      sprintf(screenBuffer[3] , "%s %-s", variable1Name, variable1String);
-      sprintf(screenBuffer[4] , "%s %-s", variable2Name, variable2String);
+      //  sprintf(screenBuffer[3] , "%s %-s", variable1Name, variable1String);
+      sprintf(screenBuffer[3] , "%-20s", variable1Name);
+      sprintf(screenBuffer[4] , "%20s", variable1String);
+
+      //      sprintf(screenBuffer[5] , "%s %-s", variable2Name, variable2String);
+      sprintf(screenBuffer[5] , "%-20s", variable2Name);
+      sprintf(screenBuffer[6] , "%20s", variable2String);
+
       //  sprintf(screenBuffer[5] , "%20s", lineWipe);
       // sprintf(screenBuffer[6] , "%20s", lineWipe);
       // sprintf(screenBuffer[7] , "%20s", lineWipe);
@@ -538,6 +544,7 @@ void itemSelect() {
       scrollItem = true;
       scrollPage = true;
       animationTimer = millis();    // bug fix would like this to be more self contained in animation function
+      charSaveMode = false;
 
       // save char here
       //     *variable1String = saveCharString();
@@ -600,12 +607,16 @@ void saveCharString() {
   Serial.println(" ");
 
 
-  for (int i = 0 ; i < 20; i++) {
+  for (int i = 0 ; i < 21; i++) {
 
     if (!startTranslate) {
       if (editString[i] != 32) {         // if input string does not contain a leading space
 
-        Serial.println(i);
+        Serial.print("Char Number: ");
+        Serial.print(i);
+        Serial.print("  = ");
+        Serial.println(editString[i]);
+
 
         x = i;                            // record number of leading spaces
         startTranslate = true;
@@ -615,14 +626,19 @@ void saveCharString() {
 
   startTranslate = false;
 
-  for (int i = x; i < 20; i++) {
+  for (int i = x; i < 21; i++) {
 
-
-
-    Serial.println(z);
-
+    Serial.print("editString: ");
+    Serial.print(" i = ");
+    Serial.print(i);
+    Serial.print(" = ");
+    Serial.print(editString[i]);
+    Serial.print("    ");
+    Serial.print(" variableString z  = ");
+    Serial.print(z);
+    Serial.print(" = ");
     variable1String[z] = editString[i];
-
+    Serial.println(variable1String[z]);
     z++;
   }
 
@@ -631,11 +647,14 @@ void saveCharString() {
 
   //probably need to wipe editString here though
 
-   sprintf(editString , "%20s" , lineWipe);
+  sprintf(editString , "%20s" , lineWipe);
 
 
   Serial.printf("Post Translation: %s Length: %u", variable1String, sizeofString);
   Serial.println(" ");
+  Serial.print(":");
+  Serial.print(variable1String);
+  Serial.println(":");
 
   //sprintf(shorterString, "%s", editString);
 
@@ -644,6 +663,8 @@ void saveCharString() {
   sizeofString = strlen(variable1String);                // this should return something smaller than 21
 
   sprintf(screenBuffer[6] , "%-20s Chars Saved: %u" , saveText, sizeofString);
+
+
 
   /// delay(2000);   // just for testing
 

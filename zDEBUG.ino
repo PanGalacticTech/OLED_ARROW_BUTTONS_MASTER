@@ -49,7 +49,8 @@ void debugFunction() {
       //    Serial.print(buttonLockout);
 
 
-
+      //   Serial.print("Char Save Mode: ");
+      //    Serial.println(charSaveMode);
 
 
 
