@@ -603,7 +603,11 @@ void saveCharString() {
 
   sizeofString = strlen(variable1String);                // this should return something smaller than 21
 
-  Serial.printf(" Pre Translation: %s Length: %u", variable1String, sizeofString);
+  Serial.printf(" Pre Translation: :%s: Length: %u", variable1String, sizeofString);
+  Serial.println(" ");
+
+  sizeofString = strlen(variable1String);
+  Serial.printf("  Empty String: :%s: Length: %u", variable1String, sizeofString);
   Serial.println(" ");
 
 
@@ -626,6 +630,10 @@ void saveCharString() {
 
   startTranslate = false;
 
+
+  sprintf(variable1String , "%20s" , lineWipe);     // wipe the string ready for re-writing
+
+
   for (int i = x; i < 21; i++) {
 
     Serial.print("editString: ");
@@ -637,20 +645,35 @@ void saveCharString() {
     Serial.print(" variableString z  = ");
     Serial.print(z);
     Serial.print(" = ");
+
+
     variable1String[z] = editString[i];
     Serial.println(variable1String[z]);
     z++;
+
   }
 
-  // this should have switched everything out fairly robustly.
+  // this should have switched everything out fairly robustly. but still need to remove trailing zeros
+
+
+  char * p = strchr (variable1String, ' ');                    // search for space
+
+  if (p)  {   // if found truncate at space                       // The problem, is that this cuts off at any space, ideally It would be best to allow a single space/
+    *p = 0;
+  }
 
 
   //probably need to wipe editString here though
 
   sprintf(editString , "%20s" , lineWipe);
 
+  sizeofString = strlen(variable1String);
 
-  Serial.printf("Post Translation: %s Length: %u", variable1String, sizeofString);
+  Serial.println(sizeofString);
+
+  Serial.printf("Post Translation: :%s: Length: %u", variable1String, sizeofString);
+  
+  Serial.println(" ");
   Serial.println(" ");
   Serial.print(":");
   Serial.print(variable1String);
@@ -660,7 +683,7 @@ void saveCharString() {
 
   // sprintf(variable1String, "%s", editString);                        // this doesnt work as it doesnt shorten string and remove leading spaces
 
-  sizeofString = strlen(variable1String);                // this should return something smaller than 21
+  
 
   sprintf(screenBuffer[6] , "%-20s Chars Saved: %u" , saveText, sizeofString);
 
